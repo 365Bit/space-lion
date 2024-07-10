@@ -90,6 +90,7 @@ SET (ENGINECORE_GRAPHICS_HEADER_FILES
         src/EngineCore/MaterialComponentManager.hpp
         src/EngineCore/MeshComponentManager.hpp
         src/EngineCore/OceanComponent.hpp
+        src/EngineCore/ParticlesComponentManager.hpp
         src/EngineCore/PointlightComponent.hpp
         src/EngineCore/RenderPass.hpp
         src/EngineCore/RenderTaskComponentManager.hpp
@@ -109,6 +110,7 @@ SET (ENGINECORE_GRAPHICS_SOURCE_FILES
         src/EngineCore/MaterialComponentManager.cpp
         src/EngineCore/MeshComponentManager.cpp
         src/EngineCore/OceanComponent.cpp
+        src/EngineCore/ParticlesComponentManager.cpp
         src/EngineCore/PointlightComponent.cpp
         src/EngineCore/RenderPass.cpp
         src/EngineCore/RenderTaskComponentManager.cpp
