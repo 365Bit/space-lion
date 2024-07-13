@@ -43,3 +43,40 @@ void EngineCore::Common::checkProximityTriggers(
 
     task_scheduler.waitWhileBusy();
 }
+
+void EngineCore::Common::updateCooldownTriggers(
+    EngineCore::Common::CooldownTriggerComponentManager& cooldown_trigger_mngr,
+    double dt,
+    Utility::TaskScheduler& task_scheduler)
+{
+    size_t component_cnt = cooldown_trigger_mngr.getComponentCount();
+
+    std::vector<std::pair<size_t, size_t>> from_to_pairs;
+    size_t bucket_cnt = 6;
+    for (size_t i = 0; i < bucket_cnt; ++i) {
+        from_to_pairs.push_back({ component_cnt * (float(i) / float(bucket_cnt)), component_cnt * (float(i + 1) / float(bucket_cnt)) });
+    }
+
+    for (auto from_to : from_to_pairs) {
+        task_scheduler.submitTask(
+            [&cooldown_trigger_mngr, from_to, dt]() {
+                for (size_t i = from_to.first; i < from_to.second; ++i)
+                {
+                    if (cooldown_trigger_mngr.checkComponent(i)) {
+                        auto& cmp = cooldown_trigger_mngr.getComponent(i);
+                        if (cmp.is_active) {
+                            cmp.remaining_time -= dt;
+
+                            if (cmp.remaining_time <= 0.0f) {
+                                cmp.cooldown_callback();
+                                cmp.is_active = false;
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    }
+
+    task_scheduler.waitWhileBusy();
+}

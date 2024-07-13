@@ -56,6 +56,7 @@ SET (ENGINECORE_COMMON_HEADER_FILES
         src/EngineCore/BaseMultiInstanceComponentManager.hpp
         src/EngineCore/BaseSingleInstanceComponentManager.hpp
         src/EngineCore/BSplineComponent.hpp
+        src/EngineCore/CooldownTriggerComponentManager.hpp
         src/EngineCore/EntityManager.hpp
         src/EngineCore/Frame.hpp
         src/EngineCore/InputEvent.hpp
@@ -67,6 +68,7 @@ SET (ENGINECORE_COMMON_HEADER_FILES
 
 SET (ENGINECORE_COMMON_SOURCE_FILES
         src/EngineCore/BSplineComponent.cpp
+        src/EngineCore/CooldownTriggerComponentManager.cpp
         src/EngineCore/EntityManager.cpp
         src/EngineCore/Frame.cpp
         src/EngineCore/NameComponentManager.cpp
