@@ -79,6 +79,13 @@ namespace EngineCore
                     }
                 }
 
+    #pragma region Create buffer
+                template<typename BufferDataType>
+                ResourceID createStructuredBufferAsync(
+                    std::string const& name,
+                    std::shared_ptr<std::vector<BufferDataType>> const& data);
+    #pragma endregion
+
     #pragma region Create mesh
                 //template<
                 //    typename VertexContainer,
@@ -590,6 +597,51 @@ namespace EngineCore
             //    return m_meshes.back().id;
             //}
 
+            template<typename BufferDataType>
+            inline ResourceID ResourceManager::createStructuredBufferAsync(
+                std::string const& name,
+                std::shared_ptr<std::vector<BufferDataType>> const& data)
+            {
+                std::unique_lock<std::shared_mutex> lock(m_buffers_mutex);
+
+                size_t idx = m_buffers.size();
+                ResourceID rsrc_id = generateResourceID();
+                m_buffers.push_back(Resource<dxowl::Buffer>(rsrc_id));
+
+                addBufferIndex(rsrc_id.value(), name, idx);
+
+                m_renderThread_tasks.push(
+                    [this,idx,data]() {
+
+                        D3D11_BUFFER_DESC desc = {};
+                        desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
+                        desc.ByteWidth = sizeof(BufferDataType) * data->size();
+                        desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+                        desc.StructureByteStride = sizeof(BufferDataType);
+
+                        this->m_buffers[idx].resource = std::make_unique<dxowl::Buffer>(
+                            m_d3d11_device,
+                            desc,
+                            *(data));
+
+                        this->m_buffers[idx].state = READY;
+                    }
+                );
+
+                //auto result = std::async([this, idx, data, desc, shdr_rsrc_view]() {
+                //
+                //    //this->m_textures_2d[idx].resource = std::make_unique<Texture2D>(
+                //    //    m_device_resources->GetD3DDevice(),
+                //    //    *data,
+                //    //    desc,
+                //    //    shdr_rsrc_view);
+                //    //
+                //    this->m_textures_2d[idx].state = READY;
+                //});
+
+                return m_textures_2d[idx].id;
+            }
+
             template<typename VertexContainer, typename IndexContainer>
             inline void ResourceManager::updateMesh(
                 ResourceID rsrc_id,
@@ -670,7 +722,7 @@ namespace EngineCore
 
             template<typename TexelDataContainer>
             inline ResourceID ResourceManager::createTexture2DAsync(
-                std::string const &                                      name, 
+                std::string const &                                      name,
                 std::shared_ptr<std::vector<TexelDataContainer>> const & data,
                 D3D11_TEXTURE2D_DESC const &                             desc,
                 D3D11_SHADER_RESOURCE_VIEW_DESC const &                  shdr_rsrc_view)

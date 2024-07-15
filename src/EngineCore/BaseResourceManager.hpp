@@ -134,6 +134,11 @@ namespace EngineCore
                 return retval;
             }
 
+            inline void addBufferIndex(unsigned int rsrc_id, std::string name, size_t index) {
+                m_id_to_buffer_idx.insert(std::pair<unsigned int, size_t>(rsrc_id, index));
+                m_name_to_buffer_idx.insert(std::pair<std::string, size_t>(name, index));
+            }
+
             inline void addMeshIndex(unsigned int rsrc_id, std::string name, size_t index) {
                 m_id_to_mesh_idx.insert(std::pair<unsigned int, size_t>(rsrc_id, index));
                 m_name_to_mesh_idx.insert(std::pair<std::string, size_t>(name, index));
@@ -198,16 +203,16 @@ namespace EngineCore
         {
             std::shared_lock<std::shared_mutex> lock(m_buffers_mutex);
 
-            WeakResource<Mesh> retval(rsrc_id, nullptr, NOT_READY);
+            WeakResource<Buffer> retval(rsrc_id, nullptr, NOT_READY);
 
             auto query = m_id_to_buffer_idx.find(rsrc_id.value());
 
             if (query != m_id_to_buffer_idx.end())
             {
                 retval = WeakResource<Buffer>(
-                    m_meshes[query->second].id,
-                    m_meshes[query->second].resource.get(),
-                    m_meshes[query->second].state);
+                    m_buffers[query->second].id,
+                    m_buffers[query->second].resource.get(),
+                    m_buffers[query->second].state);
             }
 
             return retval;
