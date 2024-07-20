@@ -112,7 +112,6 @@ SET (ENGINECORE_GRAPHICS_SOURCE_FILES
         src/EngineCore/MaterialComponentManager.cpp
         src/EngineCore/MeshComponentManager.cpp
         src/EngineCore/OceanComponent.cpp
-        src/EngineCore/ParticlesComponentManager.cpp
         src/EngineCore/PointlightComponent.cpp
         src/EngineCore/RenderPass.cpp
         src/EngineCore/RenderTaskComponentManager.cpp
@@ -142,7 +141,8 @@ SET (ENGINECORE_GRAPHICS_GL_SOURCE_FILES
 SET (ENGINECORE_GRAPHICS_DX11_HEADER_FILES
         src/EngineCore/Dx11/Dx11Frame.hpp
         src/EngineCore/Dx11/SimpleForwardRenderingPipeline.hpp
-        src/EngineCore/Dx11/ResourceManager.hpp)
+        src/EngineCore/Dx11/ResourceManager.hpp
+        src/EngineCore/Dx11/ParticlesRenderPass.hpp)
 
 SET (ENGINECORE_GRAPHICS_DX11_SOURCE_FILES
         src/EngineCore/Dx11/SimpleForwardRenderingPipeline.cpp

@@ -2,6 +2,7 @@
 #define Dx11Frame_hpp
 
 #include <d3d11_4.h>
+#include <wrl.h>
 
 #include "Frame.hpp"
 
