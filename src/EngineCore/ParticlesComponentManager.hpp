@@ -23,12 +23,12 @@ namespace EngineCore {
                 ResourceID particle_data;
             };
 
-            Utility::ComponentStorage<Data, 1000, 1000> data_;
+            EngineCore::Utility::ComponentStorage<Data, 1000, 1000> data_;
 
             ResourceManagerType* resource_mngr_;
 
         public:
-            ParticlesComponentManager() = default;
+            ParticlesComponentManager(ResourceManagerType* rsrc_mngr);
             ~ParticlesComponentManager() = default;
 
             template<typename ParticleType>
@@ -69,6 +69,12 @@ namespace EngineCore {
             auto [page_idx, idx_in_page] = data_.getIndices(index);
 
             return index;
+        }
+
+        template<typename ResourceManagerType>
+        inline ParticlesComponentManager<ResourceManagerType>::ParticlesComponentManager(ResourceManagerType* rsrc_mngr)
+            : resource_mngr_(rsrc_mngr)
+        {
         }
 
         template<typename ResourceManagerType>
