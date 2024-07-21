@@ -101,8 +101,21 @@ namespace EngineCore {
 
                         frame.createViewProjectionConstantBuffer(resources.d3d11_device, resources.view_proj_buffer);
 
-                        Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer =
-                            createConstantBuffer(resources.d3d11_device, data.particles_cbs.data(), data.particles_cbs.size());
+                        //TODO why not use dxowl?
+                        Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer(nullptr);
+                        if (data.particles_cbs.size() > 0) {
+                            D3D11_SUBRESOURCE_DATA constantBufferData = { 0 };
+                            constantBufferData.pSysMem = data.particles_cbs.data();
+                            constantBufferData.SysMemPitch = 0;
+                            constantBufferData.SysMemSlicePitch = 0;
+                            const CD3D11_BUFFER_DESC constantBufferDesc(sizeof(Data::ParticlesConstantBuffer) * data.particles_cbs.size(), D3D11_BIND_CONSTANT_BUFFER);
+                            winrt::check_hresult(
+                                resources.d3d11_device->CreateBuffer(
+                                    &constantBufferDesc,
+                                    &constantBufferData,
+                                    &constant_buffer
+                                ));
+                        }
 
                         resources.particles_resources.reserve(data.particles_cbs.size());
 
