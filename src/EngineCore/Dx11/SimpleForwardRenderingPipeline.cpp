@@ -4,6 +4,7 @@
 #include "CameraComponent.hpp"
 #include "MaterialComponentManager.hpp"
 #include "MeshComponentManager.hpp"
+#include "../Dx11/ParticlesRenderPass.hpp"
 #include "RenderTaskComponentManager.hpp"
 #include "ResourceManager.hpp"
 #include "TransformComponentManager.hpp"
@@ -726,6 +727,11 @@ void EngineCore::Graphics::Dx11::setupSimpleForwardRenderingPipeline(
             nullptr,
             0
         );
+
+        // reset blend state
+        device_context->OMSetBlendState(nullptr, nullptr, UINT_MAX);
     }
     );
+
+    EngineCore::Graphics::Dx11::addParticlesRenderPass(frame, world, resource_mngr);
 }
