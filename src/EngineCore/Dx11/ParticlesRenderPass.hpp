@@ -1,6 +1,7 @@
 #ifndef ParticlesRenderPass_hpp
 #define ParticlesRenderPass_hpp
 
+#include "Frame.hpp"
 #include "MaterialComponentManager.hpp"
 #include "MeshComponentManager.hpp"
 #include "ParticlesComponentManager.hpp"
@@ -12,12 +13,6 @@
 namespace EngineCore {
     namespace Graphics {
         namespace Dx11 {
-
-            template<typename FrameType>
-            void addParticlesRenderPass(
-                FrameType& frame,
-                WorldState& world_state,
-                ResourceManager& resource_mngr);
 
             template<typename FrameType>
             void addParticlesRenderPass(FrameType& frame, WorldState& world_state, ResourceManager& resource_mngr)

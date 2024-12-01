@@ -6,6 +6,7 @@
 #ifndef RenderTaskComponentManager_hpp
 #define RenderTaskComponentManager_hpp
 
+#include <algorithm>
 #include <set>
 
 #include "EntityManager.hpp"
