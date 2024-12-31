@@ -1,8 +1,8 @@
 #include "AnimationSystems.hpp"
 
 void EngineCore::Animation::animateTurntables(
-    EngineCore::Common::TransformComponentManager & transform_mngr,
-    EngineCore::Animation::TurntableComponentManager & turntable_mngr,
+    EngineCore::Common::TransformComponentManager& transform_mngr,
+    EngineCore::Animation::TurntableComponentManager& turntable_mngr,
     double dt,
     Utility::TaskScheduler& task_scheduler)
 {
@@ -15,7 +15,7 @@ void EngineCore::Animation::animateTurntables(
     for (size_t i = 0; i < bucket_cnt; ++i) {
         from_to_pairs.push_back({ tt_cmps.size() * (float(i) / float(bucket_cnt)), tt_cmps.size() * (float(i + 1) / float(bucket_cnt)) });
     }
-    
+
     for (auto from_to : from_to_pairs) {
         task_scheduler.submitTask(
             [&transform_mngr, &tt_cmps, from_to, dt]() {
@@ -27,7 +27,7 @@ void EngineCore::Animation::animateTurntables(
             }
         );
     }
-    
+
     task_scheduler.waitWhileBusy();
 
     auto t_1 = std::chrono::high_resolution_clock::now();
@@ -40,7 +40,7 @@ void EngineCore::Animation::animateTurntables(
 void EngineCore::Animation::animateTagAlong(
     EngineCore::Common::TransformComponentManager& transform_mngr,
     EngineCore::Animation::TagAlongComponentManager& tagalong_mngr,
-    double dt) 
+    double dt)
 {
     auto tag_cmps = tagalong_mngr.getTagComponentDataCopy();
 
@@ -55,7 +55,7 @@ void EngineCore::Animation::animateTagAlong(
 
         Vec3 movement_vector = target_front_pos - entity_position;
         float distance = glm::length(movement_vector);
-        float deadzone_factor = distance > 0.0f ? std::max(0.0f,(distance - cmp.deadzone)) / distance : 0.0f;
+        float deadzone_factor = distance > cmp.deadzone ? (distance - cmp.deadzone) / distance : 0.0f;
 
         target_front_pos = entity_position + movement_vector * deadzone_factor * std::min(1.0f, (static_cast<float>(dt) / cmp.time_to_target));
 
@@ -86,7 +86,7 @@ void EngineCore::Animation::animateBillboards(
         }
 
         // Mirror target position to make +z face the original target
-        auto mirrored_target_pos = target_pos - 2.0f * (target_pos-entity_pos);
+        auto mirrored_target_pos = target_pos - 2.0f * (target_pos - entity_pos);
         auto r = glm::toQuat(glm::inverse(glm::lookAt(entity_pos, mirrored_target_pos, Vec3(0.0f, 1.0f, 0.0f))));
         transform_mngr.setOrientation(entity_idx, r);
     }
