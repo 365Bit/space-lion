@@ -18,12 +18,19 @@ namespace Editor {
 
             EngineCore::Common::Input::InputActionContext const& getGamepadInputActionContext();
 
+            void resetValues(Vec3 rot_center, float radius);
+            void setRadius(float radius);
             void setRotCenter(Vec3 rot_center);
 
         private:
 
             /** Keep a reference (i.e. non-owning) to the world state */
             EngineCore::WorldState& world_state_;
+
+            float yaw_;
+            float pitch_;
+            float pitch_limit_;
+            float radius_;
 
             Vec3 rot_center_;
 
